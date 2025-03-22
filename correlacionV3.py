@@ -109,3 +109,32 @@ df_clean['volumen_cambio'] = df_clean['volumen'].pct_change()
 pump_and_dump = df_clean[(df_clean['precio_cambio'] > 0.1) & (df_clean['volumen_cambio'] > 0.5)]
 print("Eventos sospechosos de Pump & Dump:")
 print(pump_and_dump)
+
+# Relación entre volumen y cambio de precio
+plt.figure(figsize=(8,6))
+sns.scatterplot(data=df_clean, x='volumen_variacion', y='precio_cambio', alpha=0.5)
+plt.title("Relación entre variación de volumen y cambio de precio")
+plt.xlabel("Variación del Volumen")
+plt.ylabel("Cambio del Precio")
+plt.show()
+
+# Superposición de variaciones en el tiempo
+fig, ax1 = plt.subplots(figsize=(10,6))
+
+ax2 = ax1.twinx()
+ax1.plot(df_clean.index, df_clean['volumen_variacion'], color='blue', label="Variación de Volumen", alpha=0.6)
+ax2.plot(df_clean.index, df_clean['precio_cambio'], color='red', label="Cambio de Precio", alpha=0.6)
+
+ax1.set_xlabel("Tiempo")
+ax1.set_ylabel("Variación de Volumen", color='blue')
+ax2.set_ylabel("Cambio de Precio", color='red')
+
+fig.legend(loc="upper left", bbox_to_anchor=(0.1,0.9))
+plt.title("Comparación de Variación de Volumen y Cambio de Precio en el Tiempo")
+plt.show()
+
+# Matriz de correlación entre volumen y precio
+correlacion = df_clean[['volumen_variacion', 'precio_cambio']].corr()
+print("Correlación entre variación de volumen y cambio de precio:")
+print(correlacion)
+
